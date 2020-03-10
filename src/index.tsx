@@ -31,7 +31,11 @@ const Home = () => {
 		<div>
 			TEST
 			{c}
-			<button onClick={() => sc(c + 1)}>CLICK ME</button>
+			<button onClick={() => {
+				console.log(c)
+				console.log(c + 1)
+				sc(1 + c)
+			}}>CLICK ME</button>
 			<Dva />
 		</div>
 	)
