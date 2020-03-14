@@ -1,0 +1,22 @@
+{
+  "name": "jl-react-components-library",
+  "description": "Boilerplate for creating React component libraries.",
+  "version": "0.0.27",
+  "author": "jmlivingston@gmail.com",
+  "license": "ISC",
+  "repository": "https://github.com/jmlivingston/react-components-library",
+  "keywords": [
+    "react",
+    "storybook",
+    "rollup",
+    "webpack"
+  ],
+  "dependencies": {
+    "react": "16.8.6",
+    "react-dom": "16.8.6"
+  },
+  "peerDependencies": {
+    "react": "16.*",
+    "react-dom": "16.*"
+  }
+}

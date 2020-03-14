@@ -159,13 +159,5 @@
         "git add"
       ]
     }
-  },
-  "husky": {
-    "hooks": {
-      "post-checkout": "if [[ $HUSKY_GIT_PARAMS  =~ 1$ ]]; then npm install --no-package-lock; fi",
-      "post-merge": "npm install --no-package-lock",
-      "post-rebase": "npm install",
-      "pre-commit": "npm run test && lint-staged"
-    }
   }
 }
