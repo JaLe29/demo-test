@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import rimraf from 'rimraf'
 import autoExternal from 'rollup-plugin-auto-external'
-import node from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import commonjs from 'rollup-plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
@@ -17,30 +16,6 @@ const buildFormats = ['cjs', 'es'] // include others if needed
 function cleanDist() {
   rimraf.sync(distDirectory)
   fs.mkdirSync(distDirectory)
-}
-
-// The source-map-explorer package which powers `npm run analyze` works by
-// examining the bundle.min.js.map file, so it's important to include the
-// source maps of all the individual package bundles that went into
-// building the final application bundle.
-const sourceMapLoaderPlugin = {
-  load(id) {
-    if (id.endsWith('.esm.js')) {
-      try {
-        const map = JSON.parse(fs.readFileSync(id + '.map'))
-        map.sources.forEach((source, i) => {
-          map.sources[i] = path.normalize(path.join(id, source))
-        })
-        return {
-          code: fs.readFileSync(id, 'utf8'),
-          map: map
-        }
-      } catch (e) {
-        console.log('failed to find source map for ' + id)
-      }
-    }
-    return null
-  }
 }
 
 function createReadmePackageJson() {
@@ -107,31 +82,12 @@ export default getFilesFolders(srcDirectory)
     input: file,
     output: getOutputs({ file }),
     plugins: [
-      node({
-        module: true
-      }),
-      autoExternal({ dependencies: false }),
+      autoExternal({ peerDependencies: false }),
       babel({
         exclude: '/node_modules/**'
       }),
-      commonjs({
-        namedExports: {
-          'node_modules/react/index.js': ['Component', 'createElement', 'Children'],
-          'node_modules/prop-types/index.js': [
-            'any',
-            'arrayOf',
-            'bool',
-            'func',
-            'node',
-            'number',
-            'object',
-            'oneOfType',
-            'string'
-          ],
-          'node_modules/react/index.js': ['useContext', 'useReducer', 'useRef', 'useEffect', 'useState']
-        }
-      }),
-      sourceMapLoaderPlugin,
+      commonjs(),
+
       postcss({
         modules: fs.existsSync(file.replace('.js', '.module.scss')) || fs.existsSync(file.replace('.js', '.module.css'))
       }),
