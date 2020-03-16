@@ -6,7 +6,8 @@ import TextArea from '../TextArea'
 import {gql} from 'apollo-boost'
 import Comment from './../Comment'
 
-const API = 'https://suite.chimp.click/graphql'
+// const API = 'https://suite.chimp.click/graphql'
+const API = 'http://localhost:8080/graphql'
 
 const client = new ApolloClient({uri: API})
 
@@ -16,22 +17,24 @@ const GET_COMMENTS = gql`
       id
       text
       createdAt
+      user
     }
   }
 `
 
 const ADD_COMMENT = gql`
-  mutation createComment($text: String!, $code: String!) {
-    createComment(data: { text: $text, code: $code }) {
+  mutation createComment($text: String!, $code: String!, $user: String) {
+    createComment(data: { text: $text, code: $code, user: $user }) {
       id
       text
       createdAt
+      user
     }
   }
 `
 
-const Comments = props => {
-	const {code, authKey} = props
+const Comments = (props) => {
+	const {code, authKey, users, user} = props
 
 	const [clientData, setClientData] = useState([])
 	const {loading, data} = useQuery(GET_COMMENTS, {variables: {code}, context: {headers: {authorization: authKey}}})
@@ -41,7 +44,7 @@ const Comments = props => {
 	const handleSubmit = useCallback(
 		async value => {
 			setInputState('sending')
-			const response = await addMessage({variables: {text: value, code}, context: {headers: {authorization: authKey}}})
+			const response = await addMessage({variables: {text: value, code, user}, context: {headers: {authorization: authKey}}})
 			const comment = response.data.createComment
 			setClientData([comment, ...clientData])
 			setInputState('done')
@@ -61,10 +64,10 @@ const Comments = props => {
 						) : (
 								<>
 									{clientData.map(c => (
-										<Comment key={c.id} {...c} />
+										<Comment key={c.id} {...c} users={users} />
 									))}
 									{data.getComments.map(c => (
-										<Comment key={c.id} {...c} />
+										<Comment key={c.id} {...c} users={users} />
 									))}
 								</>
 							)}
@@ -74,10 +77,10 @@ const Comments = props => {
 	)
 }
 
-const CommentsWrapper = () => {
+const CommentsWrapper = ({code, authKey, users, user}) => {
 	return (
 		<ApolloProvider client={client}>
-			<Comments authKey={'835b553fb710a95a026c790dd54eb97b70efa3993f9d22ef2599be4a354153e0'} code={'about'} />
+			<Comments code={code} authKey={authKey} users={users} user={user} />
 		</ApolloProvider>
 	)
 }

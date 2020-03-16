@@ -28,8 +28,6 @@ const TextArea = ({onSubmit, setInputState, inputState}) => {
 		}
 	}, [inputState, setInputState])
 
-	const handleFocus = () => setFocused(true)
-
 	const handleChange = e => {
 		if (e.keyCode === 13 && e.shiftKey === false) {
 			blockEnter = true
@@ -62,7 +60,7 @@ const TextArea = ({onSubmit, setInputState, inputState}) => {
 				value={value}
 				onChange={handleChange}
 				onKeyDown={handleChange}
-				onFocus={handleFocus}
+				onFocus={() => setFocused(true)}
 				onBlur={() => setFocused(false)}
 				className={cls.join(' ')}
 				placeholder="Join the discussion..."

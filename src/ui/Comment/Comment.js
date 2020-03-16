@@ -1,9 +1,8 @@
 import React, {useCallback} from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import css from './comment.module.scss'
 
-const css = {}
-
-const Comment = ({text, createdAt}) => {
+const Comment = ({text, user, createdAt, users}) => {
 	const getDistance = useCallback(
 		() => formatDistanceToNow(new Date(createdAt), {addSuffix: true}),
 		[createdAt]
@@ -11,11 +10,18 @@ const Comment = ({text, createdAt}) => {
 
 	return (
 		<div className={css.comment}>
-			<div className={css.hedaer}>
-				<span className={css.name}>FEJKNAME</span>
-				<span className={css.date}>{getDistance()}</span>
+			{users[user] && users[user].image && <img className={css.profilePhoto} src={users[user].image} alt={users[user].name} />}
+			<div>
+				<div className={css.headerWrapper}>
+					<div className={css.name}>
+						{users[user] ? users[user].name : 'Unknown user'}
+					</div>
+					<div className={css.date}>
+						{getDistance()}
+					</div>
+				</div>
+				<p className={css.text}>{text}</p>
 			</div>
-			<p className={css.text}>{text}</p>
 		</div>
 	)
 }

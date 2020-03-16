@@ -1,3 +1,4 @@
+@import '../../assets/styles/colors.scss';
 
 .textArea {
 	border-radius: 5px;
@@ -20,7 +21,7 @@
 }
 
 .normal {
-	border-color: red; // $mainBlue;
+	border-color: $mainBlue;
 }
 
 .notFocused {
