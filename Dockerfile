@@ -6,7 +6,7 @@ RUN npm install
 
 COPY src src
 
-COPY .env .env
+# COPY .env .env
 
 EXPOSE 4444
 
