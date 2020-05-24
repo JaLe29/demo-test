@@ -10,6 +10,4 @@ COPY src src
 
 EXPOSE 4444
 
-EXPOSE 4445
-
 CMD ["npm", "run", "start"]
