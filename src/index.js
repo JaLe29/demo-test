@@ -6,7 +6,7 @@ config()
 
 const port = 4444
 
-app.get('/', (req, res) => res.send('fffffffffffffffff'))
+app.get('/', (req, res) => res.send('ahoj'))
 
 app.get('/env', (req, res) => res.send(process.env))
 
